@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Grammar Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1a2e;
+    --ink-soft:  #4a4a6a;
+    --ink-mute:  #8888aa;
+    --paper:     #faf9f6;
+    --paper-2:   #f2f0eb;
+    --paper-3:   #e8e5de;
+    --accent:    #2e5ba8;
+    --accent-lt: #dde7f7;
+    --amber:     #c47a1e;
+    --amber-lt:  #fdf0db;
+    --green:     #2a7a4e;
+    --green-lt:  #ddf2e8;
+    --red:       #b03030;
+    --red-lt:    #fce8e8;
+    --rule:      rgba(26,26,46,0.10);
+    --shadow:    0 2px 16px rgba(26,26,46,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  header {
+    background: var(--ink);
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-mark {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px; font-weight: 500;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px; font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+  .header-text p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── Main layout ─────────────────────────────────────── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── Login card ──────────────────────────────────────── */
+  .login-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 48px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: var(--shadow);
+  }
+  .login-card h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .login-card .subtitle {
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 32px;
+  }
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .id-input {
+    width: 100%;
+    height: 48px;
+    border: 1.5px solid var(--paper-3);
+    border-radius: 10px;
+    padding: 0 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.06em;
+  }
+  .id-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-lt);
+  }
+  .login-btn {
+    width: 100%;
+    height: 48px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .login-btn:hover { background: #1f4690; }
+  .login-btn:active { transform: scale(0.99); }
+  .login-btn:disabled { background: var(--paper-3); color: var(--ink-mute); cursor: default; }
+
+  /* ── Error / info messages ───────────────────────────── */
+  .msg {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 16px;
+    display: none;
+  }
+  .msg.error  { background: var(--red-lt);   color: var(--red);   border: 1px solid #f5c0c0; }
+  .msg.info   { background: var(--accent-lt); color: var(--accent); border: 1px solid #b8cff0; }
+  .msg.show   { display: block; }
+
+  /* ── Week selector panel ─────────────────────────────── */
+  #week-panel { display: none; }
+  .student-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .student-info h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px; font-weight: 600;
+  }
+  .student-meta {
+    display: flex; gap: 8px; margin-top: 6px;
+  }
+  .badge {
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+  .badge-class    { background: var(--ink); color: #fff; }
+  .badge-textbook { background: var(--accent-lt); color: var(--accent); }
+  .logout-btn {
+    font-size: 12px; color: var(--ink-mute);
+    background: none; border: 1px solid var(--paper-3);
+    border-radius: 8px; padding: 6px 14px; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .logout-btn:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+  .week-select-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 32px;
+  }
+  .week-select-row label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-soft); white-space: nowrap;
+  }
+  .week-select {
+    height: 40px;
+    border: 1.5px solid var(--paper-3);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    cursor: pointer;
+    min-width: 160px;
+    transition: border-color 0.2s;
+  }
+  .week-select:focus { border-color: var(--accent); }
+
+  /* ── Blog display ────────────────────────────────────── */
+  #blog-panel { display: none; }
+
+  .blog-header {
+    display: flex; align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .blog-header h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px; font-weight: 600;
+  }
+  .blog-date {
+    font-size: 12px; color: var(--ink-mute);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .blog-body {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 32px;
+    font-size: 15px;
+    line-height: 1.85;
+    box-shadow: var(--shadow);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* ── Error highlights & tooltips ─────────────────────── */
+  .err-span {
+    background: var(--amber-lt);
+    border-bottom: 2px solid var(--amber);
+    border-radius: 3px;
+    padding: 1px 2px;
+    cursor: help;
+    position: relative;
+    display: inline;
+    transition: background 0.15s;
+  }
+  .err-span:hover {
+    background: #fce4b0;
+  }
+  .err-span .tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: #fff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    min-width: 240px;
+    max-width: 320px;
+    font-size: 12px;
+    line-height: 1.5;
+    z-index: 100;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    white-space: normal;
+    text-align: left;
+  }
+  .err-span .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .err-span:hover .tooltip { display: block; }
+
+  .tooltip-correction {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #7dd3a8;
+    margin-bottom: 6px;
+  }
+  .tooltip-code {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+  .tooltip-unit {
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-top: 4px;
+  }
+  .tooltip-unit-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #93c5fd;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .tooltip-unit-title {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ── Error summary panel ─────────────────────────────── */
+  .error-summary {
+    margin-top: 28px;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .error-summary-header {
+    padding: 16px 24px;
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--rule);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .error-item {
+    display: flex; align-items: flex-start;
+    gap: 16px; padding: 14px 24px;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.15s;
+  }
+  .error-item:last-child { border-bottom: none; }
+  .error-item:hover { background: var(--paper); }
+  .error-code-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 3px 8px;
+    background: var(--amber-lt);
+    color: var(--amber);
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .error-detail { flex: 1; min-width: 0; }
+  .error-pair {
+    font-size: 13px; color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .error-original { color: var(--red); text-decoration: line-through; }
+  .error-arrow { color: var(--ink-mute); margin: 0 4px; }
+  .error-correction { color: var(--green); }
+  .error-unit-ref {
+    font-size: 12px; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .unit-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-lt);
+    padding: 2px 7px; border-radius: 4px;
+  }
+
+  /* ── Loading spinner ─────────────────────────────────── */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Fade in ─────────────────────────────────────────── */
+  .fade-in {
+    animation: fadeIn 0.3s ease forwards;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Responsive ──────────────────────────────────────── */
+  @media (max-width: 600px) {
+    header { padding: 20px; }
+    .login-card { padding: 32px 24px; }
+    .blog-body { padding: 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-mark">EWS</div>
+  <div class="header-text">
+    <h1>Blog Grammar Analysis</h1>
+    <p>English Writing Skills — Grammar Feedback</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- LOGIN -->
+  <div id="login-panel">
+    <div class="login-card fade-in">
+      <h2>Sign in</h2>
+      <p class="subtitle">Enter your student ID number to view your grammar feedback.</p>
+      <label class="field-label" for="id-input">Student ID</label>
+      <input class="id-input" type="text" id="id-input" placeholder="e.g. 2211003"
+             maxlength="10" autocomplete="off" inputmode="numeric">
+      <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
+      <div class="msg" id="login-msg"></div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.0</div>
+    </div>
+  </div>
+
+  <!-- WEEK SELECTOR -->
+  <div id="week-panel">
+    <div class="student-bar fade-in">
+      <div class="student-info">
+        <h2 id="student-name"></h2>
+        <div class="student-meta">
+          <span class="badge badge-class"  id="student-class"></span>
+          <span class="badge badge-textbook" id="student-textbook"></span>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+    </div>
+
+    <div class="week-select-row">
+      <label for="week-select">Select week</label>
+      <select class="week-select" id="week-select" onchange="loadWeek(this.value)">
+        <option value="">— choose a week —</option>
+      </select>
+    </div>
+
+    <div class="msg" id="week-msg"></div>
+  </div>
+
+  <!-- BLOG DISPLAY -->
+  <div id="blog-panel">
+    <div class="blog-header">
+      <h3 id="blog-week-title"></h3>
+      <span class="blog-date" id="blog-date"></span>
+    </div>
+    <div class="blog-body" id="blog-body"></div>
+    <div class="error-summary" id="error-summary"></div>
+  </div>
+
+</main>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────
+const API_URL = 'https://script.google.com/macros/s/AKfycby5QkyFfVSwNLLdu-pjvUEsT7qBQyoT4Tbff7hBQBgKv897GcvCgGF8_TJ7jB71QKsg/exec';
+
+// ── STATE ─────────────────────────────────────────────────────
+let currentStudent = null;
+
+// ── HELPERS ───────────────────────────────────────────────────
+function showMsg(id, text, type) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'msg ' + type + ' show';
+}
+function hideMsg(id) {
+  const el = document.getElementById(id);
+  el.className = 'msg';
+}
+
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Loading...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = 'View My Feedback';
+  }
+}
+
+async function apiFetch(params) {
+  const url = API_URL + '?' + new URLSearchParams(params);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Network error (' + res.status + ')');
+  return res.json();
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────
+document.getElementById('id-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const id = document.getElementById('id-input').value.trim();
+  if (!id) { showMsg('login-msg', 'Please enter your student ID.', 'error'); return; }
+
+  hideMsg('login-msg');
+  setLoading('login-btn', true);
+
+  try {
+    const data = await apiFetch({ action: 'getWeeks', id: id });
+
+    if (data.error) {
+      showMsg('login-msg', data.error, 'error');
+      setLoading('login-btn', false);
+      return;
+    }
+
+    currentStudent = data;
+    currentStudent.id = id;
+
+    // Populate student bar
+    document.getElementById('student-name').textContent = data.nameEng;
+    document.getElementById('student-class').textContent = data.class;
+    document.getElementById('student-textbook').textContent = data.textbook + ' Textbook';
+
+    // Populate week dropdown
+    const sel = document.getElementById('week-select');
+    sel.innerHTML = '<option value="">— choose a week —</option>';
+    if (data.weeks && data.weeks.length > 0) {
+      data.weeks.forEach(function(w) {
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = 'Week ' + w;
+        sel.appendChild(opt);
+      });
+    } else {
+      showMsg('week-msg', 'No feedback available yet. Check back after your teacher has processed this week\'s blogs.', 'info');
+    }
+
+    // Switch panels
+    document.getElementById('login-panel').style.display = 'none';
+    document.getElementById('week-panel').style.display = 'block';
+    document.getElementById('blog-panel').style.display = 'none';
+
+  } catch (err) {
+    showMsg('login-msg', 'Connection error. Please try again.', 'error');
+  }
+
+  setLoading('login-btn', false);
+}
+
+// ── LOGOUT ────────────────────────────────────────────────────
+function doLogout() {
+  currentStudent = null;
+  document.getElementById('id-input').value = '';
+  document.getElementById('login-panel').style.display = 'block';
+  document.getElementById('week-panel').style.display = 'none';
+  document.getElementById('blog-panel').style.display = 'none';
+  hideMsg('login-msg');
+  hideMsg('week-msg');
+}
+
+// ── LOAD WEEK ─────────────────────────────────────────────────
+async function loadWeek(week) {
+  if (!week) {
+    document.getElementById('blog-panel').style.display = 'none';
+    return;
+  }
+
+  hideMsg('week-msg');
+  showMsg('week-msg', 'Loading...', 'info');
+
+  try {
+    const data = await apiFetch({ action: 'getWeek', id: currentStudent.id, week: week });
+
+    if (data.error) {
+      showMsg('week-msg', data.error, 'error');
+      document.getElementById('blog-panel').style.display = 'none';
+      return;
+    }
+
+    hideMsg('week-msg');
+    renderBlog(data, parseInt(week));
+
+  } catch (err) {
+    showMsg('week-msg', 'Connection error. Please try again.', 'error');
+  }
+}
+
+// ── RENDER BLOG ───────────────────────────────────────────────
+function renderBlog(data, weekNum) {
+  document.getElementById('blog-week-title').textContent = 'Week ' + weekNum + ' — Grammar Feedback';
+  document.getElementById('blog-date').textContent = data.date || '';
+
+  // Build annotated HTML from annotatedText + errors
+  const errors = data.errors || [];
+  const rawText = data.annotatedText || '';
+
+  document.getElementById('blog-body').innerHTML = buildAnnotatedHtml(rawText, errors);
+  buildErrorSummary(errors);
+
+  document.getElementById('blog-panel').style.display = 'block';
+  document.getElementById('blog-panel').classList.add('fade-in');
+  document.getElementById('blog-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── BUILD ANNOTATED HTML ──────────────────────────────────────
+// Parses the annotated text and wraps [error→correction | CODE | U##] tags
+// into highlighted spans with tooltips.
+
+function buildAnnotatedHtml(text, errors) {
+  // Escape HTML in plain text portions
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Build a lookup from "original|code" -> error object for tooltip data
+  const errMap = {};
+  errors.forEach(function(e) {
+    const key = (e.original + '|' + e.code).toLowerCase();
+    errMap[key] = e;
+  });
+
+  // Replace [error→correction | CODE | U##] or [error→correction | CODE] tags
+  // Arrow can be → (→) or → (unicode 8594)
+  const tagRe = /\[([^\]]+?)\u2192([^\]|]+?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
+
+  let result = '';
+  let lastIndex = 0;
+  let match;
+
+  while ((match = tagRe.exec(text)) !== null) {
+    // Plain text before this tag
+    result += escHtml(text.slice(lastIndex, match.index));
+
+    const original   = match[1].trim();
+    const correction = match[2].trim();
+    const code       = match[3].trim();
+    const unitRef    = match[4] ? match[4].trim() : '';
+
+    // Find unit title from errors array
+    let unitTitle = '';
+    const key = (original + '|' + code).toLowerCase();
+    if (errMap[key]) unitTitle = errMap[key].unitTitle || '';
+
+    // Build tooltip content
+    let tooltipHtml = '';
+    tooltipHtml += '<div class="tooltip-correction">' + escHtml(original) + ' &rarr; ' + escHtml(correction) + '</div>';
+    tooltipHtml += '<div class="tooltip-code">' + escHtml(getCodeLabel(code)) + '</div>';
+    if (unitRef) {
+      tooltipHtml += '<div class="tooltip-unit">';
+      tooltipHtml += '<span class="tooltip-unit-num">' + escHtml(unitRef) + '</span>';
+      tooltipHtml += '<span class="tooltip-unit-title">' + escHtml(unitTitle) + '</span>';
+      tooltipHtml += '</div>';
+    }
+
+    result += '<span class="err-span">' +
+               escHtml(original) +
+               '<span class="tooltip">' + tooltipHtml + '</span>' +
+               '</span>';
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Remaining text
+  result += escHtml(text.slice(lastIndex));
+
+  // Convert newlines to <br>
+  result = result.replace(/\n/g, '<br>');
+
+  return result;
+}
+
+// ── BUILD ERROR SUMMARY ───────────────────────────────────────
+function buildErrorSummary(errors) {
+  const container = document.getElementById('error-summary');
+  if (!errors || errors.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+  let html = '<div class="error-summary-header">Grammar notes — ' + errors.length + ' item' + (errors.length !== 1 ? 's' : '') + '</div>';
+
+  errors.forEach(function(e) {
+    html += '<div class="error-item">';
+    html += '<span class="error-code-badge">' + escHtml(e.code) + '</span>';
+    html += '<div class="error-detail">';
+    html += '<div class="error-pair">';
+    html += '<span class="error-original">' + escHtml(e.original) + '</span>';
+    html += '<span class="error-arrow">&rarr;</span>';
+    html += '<span class="error-correction">' + escHtml(e.correction) + '</span>';
+    html += '</div>';
+    if (e.unit) {
+      html += '<div class="error-unit-ref">';
+      html += '<span class="unit-chip">' + escHtml(e.unit) + '</span>';
+      html += escHtml(e.unitTitle || '');
+      html += '</div>';
+    }
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function getCodeLabel(code) {
+  const labels = {
+    VT:   'Verb Tense',
+    SVA:  'Subject-Verb Agreement',
+    ART:  'Articles',
+    PREP: 'Prepositions',
+    WF:   'Word Form',
+    SP:   'Singular / Plural',
+    WO:   'Word Order',
+    ME:   'Missing / Extra Words',
+    SC:   'Spelling & Capitalisation',
+    PU:   'Punctuation'
+  };
+  return labels[code] || code;
+}
+</script>
+</body>
+</html>
