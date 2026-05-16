@@ -255,6 +255,23 @@
   .err-span:hover {
     background: #fce4b0;
   }
+  .err-insertion {
+    background: var(--green-lt);
+    border-bottom-color: var(--green);
+    font-style: italic;
+  }
+  .err-insertion:hover {
+    background: #b8e8cf;
+  }
+  .err-deletion {
+    background: var(--red-lt);
+    border-bottom-color: var(--red);
+    text-decoration: line-through;
+    text-decoration-color: var(--red);
+  }
+  .err-deletion:hover {
+    background: #f5c0c0;
+  }
   .err-span .tooltip {
     display: none;
     position: absolute;
@@ -626,9 +643,19 @@ function buildAnnotatedHtml(text, errors) {
     errMap[key] = e;
   });
 
-  // Replace [error→correction | CODE | U##] or [error→correction | CODE] tags
-  // Arrow can be → (→) or → (unicode 8594)
-  const tagRe = /\[([^\]]+?)\u2192([^\]|]+?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
+  // First pass: normalise all tag variants into a consistent internal format
+  // so the renderer only needs to handle one pattern.
+  //
+  // Patterns Claude may produce:
+  //   [original→correction | CODE | U##]   — standard (original may be empty)
+  //   [→correction | CODE | U##]            — empty original (missing word insertion)
+  //   [original→ | CODE | U##]              — empty correction (word deletion)
+  //   [word]                                — bare insertion with no arrow/code (skip)
+  //
+  // We convert all matched tags to a normalised span. Unmatched [...] are left as-is.
+
+  // Regex: original may be empty (*), correction may be empty (*)
+  const tagRe = /\[([^\]\u2192]*)\u2192([^\]|]*?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
 
   let result = '';
   let lastIndex = 0;
@@ -647,10 +674,34 @@ function buildAnnotatedHtml(text, errors) {
     let unitTitle = '';
     const key = (original + '|' + code).toLowerCase();
     if (errMap[key]) unitTitle = errMap[key].unitTitle || '';
+    // Also try with empty original
+    if (!unitTitle) {
+      const key2 = ('|' + code).toLowerCase();
+      if (errMap[key2]) unitTitle = errMap[key2].unitTitle || '';
+    }
 
-    // Build tooltip content
+    // Decide what to display as the highlighted text
+    // If original is empty (insertion), show [+correction] in amber
+    // If correction is empty (deletion), show original with strikethrough style
+    // Otherwise show original
+    let displayText = '';
+    let spanClass = 'err-span';
+    if (original === '' && correction !== '') {
+      displayText = '[+' + correction + ']';
+      spanClass = 'err-span err-insertion';
+    } else if (original !== '' && correction === '') {
+      displayText = original;
+      spanClass = 'err-span err-deletion';
+    } else {
+      displayText = original;
+    }
+
+    // Build tooltip
     let tooltipHtml = '';
-    tooltipHtml += '<div class="tooltip-correction">' + escHtml(original) + ' &rarr; ' + escHtml(correction) + '</div>';
+    // Show original→correction line
+    const origDisplay = original !== '' ? original : '∅';
+    const corrDisplay = correction !== '' ? correction : '∅';
+    tooltipHtml += '<div class="tooltip-correction">' + escHtml(origDisplay) + ' &rarr; ' + escHtml(corrDisplay) + '</div>';
     tooltipHtml += '<div class="tooltip-code">' + escHtml(getCodeLabel(code)) + '</div>';
     if (unitRef) {
       tooltipHtml += '<div class="tooltip-unit">';
@@ -659,8 +710,8 @@ function buildAnnotatedHtml(text, errors) {
       tooltipHtml += '</div>';
     }
 
-    result += '<span class="err-span">' +
-               escHtml(original) +
+    result += '<span class="' + spanClass + '">' +
+               escHtml(displayText) +
                '<span class="tooltip">' + tooltipHtml + '</span>' +
                '</span>';
 
