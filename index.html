@@ -441,7 +441,7 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.1</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.2</div>
     </div>
   </div>
 
@@ -655,7 +655,8 @@ function buildAnnotatedHtml(text, errors) {
   // We convert all matched tags to a normalised span. Unmatched [...] are left as-is.
 
   // Regex: original may be empty (*), correction may be empty (*)
-  const tagRe = /\[([^\]\u2192]*)\u2192([^\]|]*?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
+  // Match both → (Unicode arrow) and -> (ASCII fallback)
+  const tagRe = /\[([^\]\u2192\-]*)(?:\u2192|->)([^\]|]*?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
 
   let result = '';
   let lastIndex = 0;
