@@ -441,7 +441,7 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.6</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.7</div>
     </div>
   </div>
 
@@ -503,9 +503,9 @@ const DEMO_WEEK = {
   date: 'Demo entry',
   annotatedText: `My favorite food is ramen. When I travel abroad, I always miss Japanese food the most. I [have went->have been | VT | B16] to [Philippines->the Philippines | ART | B71] last year and I stayed there for two [week->weeks | SP | B64]. The food was delicious but I [miss->missed | VT | B11] ramen every day.
 
-In [Philippines->the Philippines | ART | B71], I tried many [kind->kinds | SP | B64] of food. The people [was->were | SVA | B1] very kind and friendly. I [enjoy->enjoyed | VT | B11] eating with my [friend->friends | SP | B64]. We [go->went | VT | B11] to [→a | ME | B63] restaurant and I ordered [→a | ME | B63] fried chicken. It was very delicious but the seasoning [are->was | SVA | B1] different from Japan. I think Japanese food is [most->the most | ART | B88] delicious in the world.
+In [Philippines->the Philippines | ART | B71], I tried many [kind->kinds | SP | B64] of food. The people [was->were | SVA | B1] very kind and friendly. I [enjoy->enjoyed | VT | B11] eating with my [friend->friends | SP | B64]. We [go->went | VT | B11] to [→a | ME | B63] restaurant and I ordered [→a | ME | B63] fried chicken. It was very delicious but the seasoning [it-> | ME] [are->was | SVA | B1] different from Japan. I think Japanese food is [most->the most | ART | B88] delicious in the world.
 
-Also, I miss my family. When I [living->live | VT | B5] alone in another country, I always feel lonely. My mother always [make->makes | SVA | B5] me feel better. She [cook->cooks | SVA | B5] Japanese food for me everyday and I really appreciate it. I want to go back [→to | ME | B106] Japan soon and eat her cooking.
+Also, I miss my family. When I [living->live | VT | B5] alone in another country, I always feel lonely. My mother always [make->makes | SVA | B5] me feel better. She [cook->cooks | SVA | B5] Japanese food for me everyday and I [really very->really | ME] appreciate it. I want to go back [→to | ME | B106] Japan soon and eat her cooking.
 
 If you travel abroad, what food do you [missed->miss | VT | B5]? Please tell me your opinion!`,
   errors: [
@@ -520,11 +520,13 @@ If you travel abroad, what food do you [missed->miss | VT | B5]? Please tell me 
     { original: 'go', correction: 'went', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
     { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an' },
     { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an' },
+    { original: 'it', correction: '', code: 'ME', unit: '', unitTitle: '' },
     { original: 'are', correction: 'was', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are' },
     { original: 'most', correction: 'the most', code: 'ART', unit: 'B88', unitTitle: 'the oldest / the most expensive (superlatives)' },
     { original: 'living', correction: 'live', code: 'VT', unit: 'B5', unitTitle: 'I do/work/like (simple present)' },
     { original: 'make', correction: 'makes', code: 'SVA', unit: 'B5', unitTitle: 'I do/work/like (simple present)' },
     { original: 'cook', correction: 'cooks', code: 'SVA', unit: 'B5', unitTitle: 'I do/work/like (simple present)' },
+    { original: 'really very', correction: 'really', code: 'ME', unit: '', unitTitle: '' },
     { original: '', correction: 'to', code: 'ME', unit: 'B106', unitTitle: 'to/in/at (place prepositions 3)' },
     { original: 'missed', correction: 'miss', code: 'VT', unit: 'B5', unitTitle: 'I do/work/like (simple present)' }
   ]
