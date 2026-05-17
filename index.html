@@ -441,7 +441,7 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.2</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.3</div>
     </div>
   </div>
 
@@ -655,8 +655,11 @@ function buildAnnotatedHtml(text, errors) {
   // We convert all matched tags to a normalised span. Unmatched [...] are left as-is.
 
   // Regex: original may be empty (*), correction may be empty (*)
-  // Match both → (Unicode arrow) and -> (ASCII fallback)
+  // Pattern 1: standard tag with arrow — [original→correction | CODE | U##]
+  // Handles Unicode → and ASCII -> arrows, empty original or correction
   const tagRe = /\[([^\]\u2192\-]*)(?:\u2192|->)([^\]|]*?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
+  // Pattern 2: no-arrow insertion tag — [word | CODE | U##] (Claude sometimes omits arrow)
+  const tagReNoArrow = /\[([^\]\u2192|]+?)\s*\|\s*(VT|SVA|ART|PREP|WF|SP|WO|ME|SC|PU)(?:\s*\|\s*([BI]\d+))?\]/g;
 
   let result = '';
   let lastIndex = 0;
@@ -719,8 +722,37 @@ function buildAnnotatedHtml(text, errors) {
     lastIndex = match.index + match[0].length;
   }
 
-  // Remaining text
+  // Remaining text after first pass
   result += escHtml(text.slice(lastIndex));
+
+  // Second pass: catch no-arrow tags [word | CODE | U##] in plain text portions
+  // These were left as escaped HTML — we need to find and replace them
+  tagReNoArrow.lastIndex = 0;
+  result = result.replace(
+    /\[([^\]&|]+?)\s*\|\s*(VT|SVA|ART|PREP|WF|SP|WO|ME|SC|PU)(?:\s*\|\s*([BI]\d+))?\]/g,
+    function(fullMatch, word, code, unit) {
+      word = word.trim();
+      unit = unit ? unit.trim() : '';
+      // Find unit title from errors array
+      var unitTitle = '';
+      var key = ('|' + code).toLowerCase();
+      if (errMap[key]) unitTitle = errMap[key].unitTitle || '';
+      var key2 = (word + '|' + code).toLowerCase();
+      if (errMap[key2]) unitTitle = errMap[key2].unitTitle || '';
+      // Build tooltip
+      var tip = '';
+      tip += '<div class="tooltip-correction">∅ &rarr; ' + escHtml(word) + '</div>';
+      tip += '<div class="tooltip-code">' + escHtml(getCodeLabel(code)) + '</div>';
+      if (unit) {
+        tip += '<div class="tooltip-unit">';
+        tip += '<span class="tooltip-unit-num">' + escHtml(unit) + '</span>';
+        tip += '<span class="tooltip-unit-title">' + escHtml(unitTitle) + '</span>';
+        tip += '</div>';
+      }
+      return '<span class="err-span err-insertion">[+' + escHtml(word) + ']' +
+             '<span class="tooltip">' + tip + '</span></span>';
+    }
+  );
 
   // Convert newlines to <br>
   result = result.replace(/\n/g, '<br>');
