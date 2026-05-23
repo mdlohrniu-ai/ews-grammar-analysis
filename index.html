@@ -441,7 +441,7 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v2.3</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v2.4</div>
     </div>
   </div>
 
@@ -590,10 +590,14 @@ function setLoading(btnId, loading) {
 
 async function apiFetch(params) {
   const url = API_URL + '?' + new URLSearchParams(params);
-  const res = await fetch(url, { redirect: 'follow' });
+  // Apps Script redirects large responses to googleusercontent.com
+  // We need to manually follow the redirect to handle CORS properly
+  const res = await fetch(url, {
+    redirect: 'follow',
+    credentials: 'omit',
+    cache: 'no-cache'
+  });
   const text = await res.text();
-  // Clean any characters that break JSON.parse
-  // Replace any char that is not valid printable ASCII or common Unicode
   const clean = text.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]/g, '?');
   return JSON.parse(clean);
 }
