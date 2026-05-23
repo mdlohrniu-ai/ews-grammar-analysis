@@ -441,7 +441,7 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.7</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v1.8</div>
     </div>
   </div>
 
@@ -724,7 +724,7 @@ function renderBlog(data, weekNum) {
 
   // Build annotated HTML from annotatedText + errors
   const errors = data.errors || [];
-  const rawText = data.annotatedText || '';
+  const rawText = fixEncoding(data.annotatedText || '');
 
   document.getElementById('blog-body').innerHTML = buildAnnotatedHtml(rawText, errors);
   buildErrorSummary(errors);
@@ -742,6 +742,20 @@ function buildAnnotatedHtml(text, errors) {
   // Escape HTML in plain text portions
   function escHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Fix encoding issues from Japanese Windows VBA export
+  function fixEncoding(s) {
+    if (!s) return s;
+    // Replace Windows-1252 misencoded curly apostrophe (shows as diamond ?)
+    s = s.replace(/\u2019/g, "'");   // right single quote -> straight apostrophe
+    s = s.replace(/\u2018/g, "'");   // left single quote
+    s = s.replace(/\u201c/g, '"');   // left double quote
+    s = s.replace(/\u201d/g, '"');   // right double quote
+    s = s.replace(/\u2013/g, '-');   // en dash
+    s = s.replace(/\u2014/g, '-');   // em dash
+    s = s.replace(/\ufffd/g, "'");   // replacement character -> apostrophe
+    return s;
   }
 
   // Build a lookup from "original|code" -> error object for tooltip data
