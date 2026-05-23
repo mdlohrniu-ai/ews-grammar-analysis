@@ -441,7 +441,7 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v2.6</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v2.7</div>
     </div>
   </div>
 
@@ -731,7 +731,15 @@ function renderBlog(data, weekNum) {
   document.getElementById('blog-date').textContent = data.date || '';
 
   // Build annotated HTML from annotatedText + errors
-  const errors = data.errors || [];
+  const errors = (data.errors || []).map(function(e) {
+    return {
+      original:   fixEncoding(e.original || ''),
+      correction: fixEncoding(e.correction || ''),
+      code:       e.code || '',
+      unit:       e.unit || '',
+      unitTitle:  fixEncoding(e.unitTitle || '')
+    };
+  });
   const rawText = fixEncoding(data.annotatedText || '');
 
   document.getElementById('blog-body').innerHTML = buildAnnotatedHtml(rawText, errors);
