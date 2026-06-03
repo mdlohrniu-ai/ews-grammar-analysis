@@ -35,7 +35,6 @@
     line-height: 1.6;
   }
 
-  /* ── Header ─────────────────────────────────────────── */
   header {
     background: var(--ink);
     padding: 28px 40px;
@@ -67,14 +66,12 @@
     margin-top: 2px;
   }
 
-  /* ── Main layout ─────────────────────────────────────── */
   main {
     max-width: 860px;
     margin: 0 auto;
     padding: 48px 24px 80px;
   }
 
-  /* ── Login card ──────────────────────────────────────── */
   .login-card {
     background: #fff;
     border: 1px solid var(--rule);
@@ -142,7 +139,6 @@
   .login-btn:active { transform: scale(0.99); }
   .login-btn:disabled { background: var(--paper-3); color: var(--ink-mute); cursor: default; }
 
-  /* ── Error / info messages ───────────────────────────── */
   .msg {
     padding: 12px 16px;
     border-radius: 8px;
@@ -154,7 +150,6 @@
   .msg.info   { background: var(--accent-lt); color: var(--accent); border: 1px solid #b8cff0; }
   .msg.show   { display: block; }
 
-  /* ── Week selector panel ─────────────────────────────── */
   #week-panel { display: none; }
   .student-bar {
     display: flex;
@@ -211,7 +206,6 @@
   }
   .week-select:focus { border-color: var(--accent); }
 
-  /* ── Blog display ────────────────────────────────────── */
   #blog-panel { display: none; }
 
   .blog-header {
@@ -241,7 +235,6 @@
     word-break: break-word;
   }
 
-  /* ── Error highlights & tooltips ─────────────────────── */
   .err-span {
     background: var(--amber-lt);
     border-bottom: 2px solid var(--amber);
@@ -252,26 +245,20 @@
     display: inline;
     transition: background 0.15s;
   }
-  .err-span:hover {
-    background: #fce4b0;
-  }
+  .err-span:hover { background: #fce4b0; }
   .err-insertion {
     background: var(--green-lt);
     border-bottom-color: var(--green);
     font-style: italic;
   }
-  .err-insertion:hover {
-    background: #b8e8cf;
-  }
+  .err-insertion:hover { background: #b8e8cf; }
   .err-deletion {
     background: var(--red-lt);
     border-bottom-color: var(--red);
     text-decoration: line-through;
     text-decoration-color: var(--red);
   }
-  .err-deletion:hover {
-    background: #f5c0c0;
-  }
+  .err-deletion:hover { background: #f5c0c0; }
   .err-span .tooltip {
     display: none;
     position: absolute;
@@ -333,9 +320,9 @@
   .tooltip-unit-title {
     font-size: 12px;
     color: rgba(255,255,255,0.85);
+    font-family: 'Noto Serif JP', serif;
   }
 
-  /* ── Error summary panel ─────────────────────────────── */
   .error-summary {
     margin-top: 28px;
     background: #fff;
@@ -383,6 +370,7 @@
   .error-unit-ref {
     font-size: 12px; color: var(--ink-soft);
     display: flex; align-items: center; gap: 6px;
+    font-family: 'Noto Serif JP', serif;
   }
   .unit-chip {
     font-family: 'DM Mono', monospace;
@@ -392,7 +380,6 @@
     padding: 2px 7px; border-radius: 4px;
   }
 
-  /* ── Loading spinner ─────────────────────────────────── */
   .spinner {
     display: inline-block;
     width: 16px; height: 16px;
@@ -405,13 +392,11 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── Fade in ─────────────────────────────────────────── */
   .fade-in {
     animation: fadeIn 0.3s ease forwards;
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-  /* ── Responsive ──────────────────────────────────────── */
   @media (max-width: 600px) {
     header { padding: 20px; }
     .login-card { padding: 32px 24px; }
@@ -431,7 +416,6 @@
 
 <main>
 
-  <!-- LOGIN -->
   <div id="login-panel">
     <div class="login-card fade-in">
       <h2>Sign in</h2>
@@ -441,11 +425,10 @@
              maxlength="10" autocomplete="off" inputmode="numeric">
       <button class="login-btn" id="login-btn" onclick="doLogin()">View My Feedback</button>
       <div class="msg" id="login-msg"></div>
-      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v2.7</div>
+      <div style="text-align:center; margin-top:20px; font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; letter-spacing:0.06em;">v2.8</div>
     </div>
   </div>
 
-  <!-- WEEK SELECTOR -->
   <div id="week-panel">
     <div class="student-bar fade-in">
       <div class="student-info">
@@ -473,7 +456,6 @@
     <div class="msg" id="week-msg"></div>
   </div>
 
-  <!-- BLOG DISPLAY -->
   <div id="blog-panel">
     <div class="blog-header">
       <h3 id="blog-week-title"></h3>
@@ -486,10 +468,8 @@
 </main>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────
 const API_URL = 'https://script.google.com/macros/s/AKfycbzFVsdjF9uSk81PmluGbROuCdYx4RTvB9OEKxwKjA5EJrJCy8zH7XfHVVhmihIdLfgv/exec';
 
-// ── DEMO DATA ────────────────────────────────────────────────
 const DEMO_ID = '0000000';
 const DEMO_DATA = {
   id: '0000000',
@@ -509,26 +489,26 @@ Also, I miss my family. When I [living->live | VT | B5] alone in another country
 
 If you travel abroad, what food do you [missed->miss | VT | B5]? Please tell me your opinion!`,
   errors: [
-    { original: 'have went', correction: 'have been', code: 'VT', unit: 'B16', unitTitle: 'Have you ...? (present perfect: experience)' },
-    { original: 'Philippines', correction: 'the Philippines', code: 'ART', unit: 'B71', unitTitle: 'the + place names' },
-    { original: 'week', correction: 'weeks', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'miss', correction: 'missed', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: 'kind', correction: 'kinds', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'was', correction: 'were', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are' },
-    { original: 'enjoy', correction: 'enjoyed', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: 'friend', correction: 'friends', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'go', correction: 'went', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an' },
-    { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an' },
-    { original: 'it', correction: '', code: 'ME', unit: '', unitTitle: '' },
-    { original: 'are', correction: 'was', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are' },
-    { original: 'most', correction: 'the most', code: 'ART', unit: 'B88', unitTitle: 'the oldest / the most expensive (superlatives)' },
-    { original: 'living', correction: 'live', code: 'VT', unit: 'B5', unitTitle: 'I do/work/like (simple present)' },
-    { original: 'make', correction: 'makes', code: 'SVA', unit: 'B5', unitTitle: 'I do/work/like (simple present)' },
-    { original: 'cook', correction: 'cooks', code: 'SVA', unit: 'B5', unitTitle: 'I do/work/like (simple present)' },
-    { original: 'really very', correction: 'really', code: 'ME', unit: '', unitTitle: '' },
-    { original: '', correction: 'to', code: 'ME', unit: 'B106', unitTitle: 'to/in/at (place prepositions 3)' },
-    { original: 'missed', correction: 'miss', code: 'VT', unit: 'B5', unitTitle: 'I do/work/like (simple present)' }
+    { original: 'have went', correction: 'have been', code: 'VT', unit: 'B16', unitTitle: 'Have you ...? (present perfect: experience)', unitTitleJpn: 'Have you ...?（現在完了形：現在までの経験）' },
+    { original: 'Philippines', correction: 'the Philippines', code: 'ART', unit: 'B71', unitTitle: 'the + place names', unitTitleJpn: 'the + 場所の名前' },
+    { original: 'week', correction: 'weeks', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'miss', correction: 'missed', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: 'kind', correction: 'kinds', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'was', correction: 'were', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are', unitTitleJpn: 'am/is/are（be 動詞の肯定文、否定文）' },
+    { original: 'enjoy', correction: 'enjoyed', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: 'friend', correction: 'friends', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'go', correction: 'went', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an', unitTitleJpn: 'a/an（不定冠詞）' },
+    { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an', unitTitleJpn: 'a/an（不定冠詞）' },
+    { original: 'it', correction: '', code: 'ME', unit: '', unitTitle: '', unitTitleJpn: '' },
+    { original: 'are', correction: 'was', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are', unitTitleJpn: 'am/is/are（be 動詞の肯定文、否定文）' },
+    { original: 'most', correction: 'the most', code: 'ART', unit: 'B88', unitTitle: 'the oldest / the most expensive (superlatives)', unitTitleJpn: 'the oldest／the most expensive（最上級）' },
+    { original: 'living', correction: 'live', code: 'VT', unit: 'B5', unitTitle: 'I do/work/like (simple present)', unitTitleJpn: 'I do/work/like など（単純現在形）' },
+    { original: 'make', correction: 'makes', code: 'SVA', unit: 'B5', unitTitle: 'I do/work/like (simple present)', unitTitleJpn: 'I do/work/like など（単純現在形）' },
+    { original: 'cook', correction: 'cooks', code: 'SVA', unit: 'B5', unitTitle: 'I do/work/like (simple present)', unitTitleJpn: 'I do/work/like など（単純現在形）' },
+    { original: 'really very', correction: 'really', code: 'ME', unit: '', unitTitle: '', unitTitleJpn: '' },
+    { original: '', correction: 'to', code: 'ME', unit: 'B106', unitTitle: 'to/in/at (place prepositions 3)', unitTitleJpn: 'to/in/at（場所を表す前置詞３）' },
+    { original: 'missed', correction: 'miss', code: 'VT', unit: 'B5', unitTitle: 'I do/work/like (simple present)', unitTitleJpn: 'I do/work/like など（単純現在形）' }
   ]
 };
 
@@ -543,30 +523,28 @@ I also like autumn because I can do sports [comfortable->comfortably | WF | B84]
 
 What is your favorite season? Please [tell to->tell | PREP | B111] me!`,
   errors: [
-    { original: 'color', correction: 'colors', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'are', correction: 'is', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are' },
-    { original: 'food', correction: 'foods', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'go', correction: 'went', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: 'impress', correction: 'impressed', code: 'WF', unit: 'B83', unitTitle: 'old/nice/interesting (adjectives)' },
-    { original: 'temple', correction: 'temples', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'shrine', correction: 'shrines', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'take', correction: 'took', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: 'thousand', correction: 'thousands', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'walking', correction: 'walked', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: 'take', correction: 'took', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)' },
-    { original: 'hour', correction: 'hours', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: 'comfortable', correction: 'comfortably', code: 'WF', unit: 'B84', unitTitle: 'quickly/badly/suddenly (adverbs)' },
-    { original: 'are', correction: 'is', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are' },
-    { original: 'friend', correction: 'friends', code: 'SP', unit: 'B64', unitTitle: 'train(s) / bus(es) (singular and plural)' },
-    { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an' },
-    { original: 'tell to', correction: 'tell', code: 'PREP', unit: 'B111', unitTitle: 'listen to / look at (verb + preposition)' }
+    { original: 'color', correction: 'colors', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'are', correction: 'is', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are', unitTitleJpn: 'am/is/are（be 動詞の肯定文、否定文）' },
+    { original: 'food', correction: 'foods', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'go', correction: 'went', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: 'impress', correction: 'impressed', code: 'WF', unit: 'B83', unitTitle: 'old/nice/interesting (adjectives)', unitTitleJpn: 'old/nice/interesting など（形容詞）' },
+    { original: 'temple', correction: 'temples', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'shrine', correction: 'shrines', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'take', correction: 'took', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: 'thousand', correction: 'thousands', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'walking', correction: 'walked', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: 'take', correction: 'took', code: 'VT', unit: 'B11', unitTitle: 'worked/got/went (simple past)', unitTitleJpn: 'worked/got/went など（単純過去形）' },
+    { original: 'hour', correction: 'hours', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: 'comfortable', correction: 'comfortably', code: 'WF', unit: 'B84', unitTitle: 'quickly/badly/suddenly (adverbs)', unitTitleJpn: 'quickly/badly/suddenly など（副詞）' },
+    { original: 'are', correction: 'is', code: 'SVA', unit: 'B1', unitTitle: 'am/is/are', unitTitleJpn: 'am/is/are（be 動詞の肯定文、否定文）' },
+    { original: 'friend', correction: 'friends', code: 'SP', unit: 'B64', unitTitle: 'singular and plural', unitTitleJpn: 'train(s)　bus(es)（単数形と複数形）' },
+    { original: '', correction: 'a', code: 'ME', unit: 'B63', unitTitle: 'a/an', unitTitleJpn: 'a/an（不定冠詞）' },
+    { original: 'tell to', correction: 'tell', code: 'PREP', unit: 'B111', unitTitle: 'listen to / look at (verb + preposition)', unitTitleJpn: 'listen to …, look at … など（動詞＋前置詞）' }
   ]
 };
 
-// ── STATE ─────────────────────────────────────────────────────
 let currentStudent = null;
 
-// ── HELPERS ───────────────────────────────────────────────────
 function showMsg(id, text, type) {
   const el = document.getElementById(id);
   el.textContent = text;
@@ -590,8 +568,6 @@ function setLoading(btnId, loading) {
 
 async function apiFetch(params) {
   const url = API_URL + '?' + new URLSearchParams(params);
-  // Apps Script redirects large responses to googleusercontent.com
-  // We need to manually follow the redirect to handle CORS properly
   const res = await fetch(url, {
     redirect: 'follow',
     credentials: 'omit',
@@ -602,7 +578,6 @@ async function apiFetch(params) {
   return JSON.parse(clean);
 }
 
-// ── LOGIN ─────────────────────────────────────────────────────
 document.getElementById('id-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') doLogin();
 });
@@ -614,7 +589,6 @@ async function doLogin() {
   hideMsg('login-msg');
   setLoading('login-btn', true);
 
-  // Demo mode — bypass API entirely
   if (id === DEMO_ID) {
     currentStudent = DEMO_DATA;
     document.getElementById('student-name').textContent = DEMO_DATA.nameEng;
@@ -647,12 +621,10 @@ async function doLogin() {
     currentStudent = data;
     currentStudent.id = id;
 
-    // Populate student bar
     document.getElementById('student-name').textContent = data.nameEng;
     document.getElementById('student-class').textContent = data.class;
     document.getElementById('student-textbook').textContent = data.textbook + ' Textbook';
 
-    // Populate week dropdown
     const sel = document.getElementById('week-select');
     sel.innerHTML = '<option value="">— choose a week —</option>';
     if (data.weeks && data.weeks.length > 0) {
@@ -666,7 +638,6 @@ async function doLogin() {
       showMsg('week-msg', 'No feedback available yet. Check back after your teacher has processed this week\'s blogs.', 'info');
     }
 
-    // Switch panels
     document.getElementById('login-panel').style.display = 'none';
     document.getElementById('week-panel').style.display = 'block';
     document.getElementById('blog-panel').style.display = 'none';
@@ -678,7 +649,6 @@ async function doLogin() {
   setLoading('login-btn', false);
 }
 
-// ── LOGOUT ────────────────────────────────────────────────────
 function doLogout() {
   currentStudent = null;
   document.getElementById('id-input').value = '';
@@ -689,7 +659,6 @@ function doLogout() {
   hideMsg('week-msg');
 }
 
-// ── LOAD WEEK ─────────────────────────────────────────────────
 async function loadWeek(week) {
   if (!week) {
     document.getElementById('blog-panel').style.display = 'none';
@@ -698,7 +667,6 @@ async function loadWeek(week) {
 
   hideMsg('week-msg');
 
-  // Demo mode
   if (currentStudent.id === DEMO_ID) {
     const demoWeek = parseInt(week);
     renderBlog(demoWeek === 2 ? DEMO_WEEK_2 : DEMO_WEEK, demoWeek);
@@ -725,19 +693,21 @@ async function loadWeek(week) {
   }
 }
 
-// ── RENDER BLOG ───────────────────────────────────────────────
 function renderBlog(data, weekNum) {
   document.getElementById('blog-week-title').textContent = 'Week ' + weekNum + ' — Grammar Feedback';
   document.getElementById('blog-date').textContent = data.date || '';
 
-  // Build annotated HTML from annotatedText + errors
+  // ── CHANGE: pull unitTitleJpn and unitTitlesJpn from error data ──
   const errors = (data.errors || []).map(function(e) {
     return {
-      original:   fixEncoding(e.original || ''),
-      correction: fixEncoding(e.correction || ''),
-      code:       e.code || '',
-      unit:       e.unit || '',
-      unitTitle:  fixEncoding(e.unitTitle || '')
+      original:      fixEncoding(e.original || ''),
+      correction:    fixEncoding(e.correction || ''),
+      code:          e.code || '',
+      unit:          e.unit || '',
+      unitTitle:     fixEncoding(e.unitTitle || ''),
+      unitTitleJpn:  fixEncoding(e.unitTitleJpn || ''),
+      units:         e.units || [],
+      unitTitlesJpn: e.unitTitlesJpn || []
     };
   });
   const rawText = fixEncoding(data.annotatedText || '');
@@ -750,7 +720,6 @@ function renderBlog(data, weekNum) {
   document.getElementById('blog-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── ENCODING FIX ─────────────────────────────────────────────
 function fixEncoding(s) {
   if (!s) return s;
   s = s.replace(/\u2019/g, "'");
@@ -764,47 +733,24 @@ function fixEncoding(s) {
   return s;
 }
 
-// ── BUILD ANNOTATED HTML ──────────────────────────────────────
-// Parses the annotated text and wraps [error→correction | CODE | U##] tags
-// into highlighted spans with tooltips.
-
 function buildAnnotatedHtml(text, errors) {
-  // Escape HTML in plain text portions
   function escHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // Build a lookup from "original|code" -> error object for tooltip data
   const errMap = {};
   errors.forEach(function(e) {
     const key = (e.original + '|' + e.code).toLowerCase();
     errMap[key] = e;
   });
 
-  // First pass: normalise all tag variants into a consistent internal format
-  // so the renderer only needs to handle one pattern.
-  //
-  // Patterns Claude may produce:
-  //   [original→correction | CODE | U##]   — standard (original may be empty)
-  //   [→correction | CODE | U##]            — empty original (missing word insertion)
-  //   [original→ | CODE | U##]              — empty correction (word deletion)
-  //   [word]                                — bare insertion with no arrow/code (skip)
-  //
-  // We convert all matched tags to a normalised span. Unmatched [...] are left as-is.
-
-  // Regex: original may be empty (*), correction may be empty (*)
-  // Pattern 1: standard tag with arrow — [original→correction | CODE | U##]
-  // Handles Unicode → and ASCII -> arrows, empty original or correction
-  const tagRe = /\[([^\]\u2192\-]*)(?:\u2192|->)([^\]|]*?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+))?\]/g;
-  // Pattern 2: no-arrow insertion tag — [word | CODE | U##] (Claude sometimes omits arrow)
-  const tagReNoArrow = /\[([^\]\u2192|]+?)\s*\|\s*(VT|SVA|ART|PREP|WF|SP|WO|ME|SC|PU)(?:\s*\|\s*([BI]\d+))?\]/g;
+  const tagRe = /\[([^\]\u2192\-]*)(?:\u2192|->)([^\]|]*?)\s*\|\s*([A-Z]+)(?:\s*\|\s*([BI]\d+(?:\/[BI]\d+)*))?\]/g;
 
   let result = '';
   let lastIndex = 0;
   let match;
 
   while ((match = tagRe.exec(text)) !== null) {
-    // Plain text before this tag
     result += escHtml(text.slice(lastIndex, match.index));
 
     const original   = match[1].trim();
@@ -812,20 +758,22 @@ function buildAnnotatedHtml(text, errors) {
     const code       = match[3].trim();
     const unitRef    = match[4] ? match[4].trim() : '';
 
-    // Find unit title from errors array
+    // ── CHANGE: look up unitTitleJpn alongside unitTitle ──
     let unitTitle = '';
+    let unitTitleJpn = '';
     const key = (original + '|' + code).toLowerCase();
-    if (errMap[key]) unitTitle = errMap[key].unitTitle || '';
-    // Also try with empty original
+    if (errMap[key]) {
+      unitTitle    = errMap[key].unitTitle || '';
+      unitTitleJpn = errMap[key].unitTitleJpn || '';
+    }
     if (!unitTitle) {
       const key2 = ('|' + code).toLowerCase();
-      if (errMap[key2]) unitTitle = errMap[key2].unitTitle || '';
+      if (errMap[key2]) {
+        unitTitle    = errMap[key2].unitTitle || '';
+        unitTitleJpn = errMap[key2].unitTitleJpn || '';
+      }
     }
 
-    // Decide what to display as the highlighted text
-    // If original is empty (insertion), show [+correction] in amber
-    // If correction is empty (deletion), show original with strikethrough style
-    // Otherwise show original
     let displayText = '';
     let spanClass = 'err-span';
     if (original === '' && correction !== '') {
@@ -838,18 +786,26 @@ function buildAnnotatedHtml(text, errors) {
       displayText = original;
     }
 
-    // Build tooltip
+    // ── CHANGE: display Japanese title in tooltip (fallback to English) ──
     let tooltipHtml = '';
-    // Show original→correction line
     const origDisplay = original !== '' ? original : '∅';
     const corrDisplay = correction !== '' ? correction : '∅';
     tooltipHtml += '<div class="tooltip-correction">' + escHtml(origDisplay) + ' &rarr; ' + escHtml(corrDisplay) + '</div>';
     tooltipHtml += '<div class="tooltip-code">' + escHtml(getCodeLabel(code)) + '</div>';
+
     if (unitRef) {
-      tooltipHtml += '<div class="tooltip-unit">';
-      tooltipHtml += '<span class="tooltip-unit-num">' + escHtml(unitRef) + '</span>';
-      tooltipHtml += '<span class="tooltip-unit-title">' + escHtml(unitTitle) + '</span>';
-      tooltipHtml += '</div>';
+      // Handle slash-separated dual units
+      const unitParts = unitRef.split('/');
+      const jpnTitles = errMap[key] ? (errMap[key].unitTitlesJpn || []) : [];
+      const engTitles = errMap[key] ? (errMap[key].units || []) : [];
+
+      unitParts.forEach(function(u, idx) {
+        const jpnTitle = jpnTitles[idx] || unitTitleJpn || unitTitle;
+        tooltipHtml += '<div class="tooltip-unit">';
+        tooltipHtml += '<span class="tooltip-unit-num">' + escHtml(u.trim()) + '</span>';
+        tooltipHtml += '<span class="tooltip-unit-title">' + escHtml(jpnTitle) + '</span>';
+        tooltipHtml += '</div>';
+      });
     }
 
     result += '<span class="' + spanClass + '">' +
@@ -860,31 +816,26 @@ function buildAnnotatedHtml(text, errors) {
     lastIndex = match.index + match[0].length;
   }
 
-  // Remaining text after first pass
   result += escHtml(text.slice(lastIndex));
 
-  // Second pass: catch no-arrow tags [word | CODE | U##] in plain text portions
-  // These were left as escaped HTML — we need to find and replace them
-  tagReNoArrow.lastIndex = 0;
   result = result.replace(
-    /\[([^\]&|]+?)\s*\|\s*(VT|SVA|ART|PREP|WF|SP|WO|ME|SC|PU)(?:\s*\|\s*([BI]\d+))?\]/g,
+    /\[([^\]&|]+?)\s*\|\s*(VT|SVA|ART|PREP|WF|SP|WO|MOD|CL|ME|SC|PU)(?:\s*\|\s*([BI]\d+(?:\/[BI]\d+)*))?\]/g,
     function(fullMatch, word, code, unit) {
       word = word.trim();
       unit = unit ? unit.trim() : '';
-      // Find unit title from errors array
       var unitTitle = '';
+      var unitTitleJpn = '';
       var key = ('|' + code).toLowerCase();
-      if (errMap[key]) unitTitle = errMap[key].unitTitle || '';
+      if (errMap[key]) { unitTitle = errMap[key].unitTitle || ''; unitTitleJpn = errMap[key].unitTitleJpn || ''; }
       var key2 = (word + '|' + code).toLowerCase();
-      if (errMap[key2]) unitTitle = errMap[key2].unitTitle || '';
-      // Build tooltip
+      if (errMap[key2]) { unitTitle = errMap[key2].unitTitle || ''; unitTitleJpn = errMap[key2].unitTitleJpn || ''; }
       var tip = '';
       tip += '<div class="tooltip-correction">∅ &rarr; ' + escHtml(word) + '</div>';
       tip += '<div class="tooltip-code">' + escHtml(getCodeLabel(code)) + '</div>';
       if (unit) {
         tip += '<div class="tooltip-unit">';
         tip += '<span class="tooltip-unit-num">' + escHtml(unit) + '</span>';
-        tip += '<span class="tooltip-unit-title">' + escHtml(unitTitle) + '</span>';
+        tip += '<span class="tooltip-unit-title">' + escHtml(unitTitleJpn || unitTitle) + '</span>';
         tip += '</div>';
       }
       return '<span class="err-span err-insertion">[+' + escHtml(word) + ']' +
@@ -892,13 +843,10 @@ function buildAnnotatedHtml(text, errors) {
     }
   );
 
-  // Convert newlines to <br>
   result = result.replace(/\n/g, '<br>');
-
   return result;
 }
 
-// ── BUILD ERROR SUMMARY ───────────────────────────────────────
 function buildErrorSummary(errors) {
   const container = document.getElementById('error-summary');
   if (!errors || errors.length === 0) {
@@ -921,7 +869,8 @@ function buildErrorSummary(errors) {
     if (e.unit) {
       html += '<div class="error-unit-ref">';
       html += '<span class="unit-chip">' + escHtml(e.unit) + '</span>';
-      html += escHtml(e.unitTitle || '');
+      // ── CHANGE: display Japanese title, fall back to English ──
+      html += escHtml(e.unitTitleJpn || e.unitTitle || '');
       html += '</div>';
     }
     html += '</div></div>';
@@ -944,6 +893,8 @@ function getCodeLabel(code) {
     WF:   'Word Form',
     SP:   'Singular / Plural',
     WO:   'Word Order',
+    MOD:  'Modal Verbs',
+    CL:   'Clause-level Error',
     ME:   'Missing / Extra Words',
     SC:   'Spelling & Capitalisation',
     PU:   'Punctuation'
