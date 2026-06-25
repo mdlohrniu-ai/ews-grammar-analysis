@@ -901,6 +901,19 @@ function getCodeLabel(code) {
   };
   return labels[code] || code;
 }
+
+// ── AUTO-LOGIN FROM DASHBOARD ────────────────────────────────────────────
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const autoStudent = params.get('student');
+  if (autoStudent) {
+    const input = document.getElementById('id-input');
+    if (input) {
+      input.value = autoStudent;
+      doLogin();
+    }
+  }
+})();
 </script>
 </body>
 </html>
